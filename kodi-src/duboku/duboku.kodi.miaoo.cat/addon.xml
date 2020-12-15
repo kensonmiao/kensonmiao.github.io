@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="duboku.kodi.miaoo.cat" name="Duboku" version="0.0.1" provider-name="Kenson">
+    <requires>
+        <import addon="xbmc.python" version="2.25.0"/>
+        <import addon="script.module.html5lib" version="0.999.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+        <import addon="script.module.requests" version="2.22.0"/>
+        <import addon="script.module.resolveurl" version="5.0.38"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>Load content from Duboku</summary>
+        <description></description>
+        <language></language>
+        <platform>all</platform>
+        <license>Apache-2.0</license>
+        <forum></forum>
+        <website>kodi.miaoo.cat</website>
+        <email>kenson@miaoo.cat</email>
+        <source></source>
+        <news></news>
+        <disclaimer></disclaimer>
+        <assets>
+            <icon>resources/icon.png</icon>
+            <fanart>resources/fanart.jpg</fanart>
+        </assets>
+    </extension>
+</addon>
