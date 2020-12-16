@@ -48,32 +48,20 @@ def _saved_to_list_context_menu(all_title, show_url, image):
 @_dir_action
 def filters(url):
     di_list = []
-    index = 0
+    index = 'c1'
     nextAction = 'filters'
-    if re.match(r'(.)*id/(2|1[3-6])(.)*.html', url):
-        if re.match(r'(.)*id/2.html', url):
-            index = 1
-        else:
-            index = 4
-    elif re.match(r'(.)*id/1.html', url):
-        index = 2
-        if re.match(r'(.)*area/(.)*', url):
-            index = 4
-    elif re.match(r'(.)*id/3.html', url):
-        index = 2
-        nextAction = 'shows'
-    elif re.match(r'(.)*id/3.html', url):
-        index = 2
+    if re.match(r'(.*)/------1(.*)', url):
+        index = 'c3'
+    elif re.match(r'(.*)/--(.*)----1(.*)', url):
+        index = 'c2'
         nextAction = 'shows'
 
-    if re.match(r'(.)*lang/(.)*', url):
-        index = 3
-        nextAction = 'shows'
-
-    for all_title, show_url, image in scrapers.types(url, index):
+    action_url = common.action_url('shows', url=url)
+    di_list.append(common.diritem(common.getMessage(33007), action_url, ''))
+    for all_title, show_url in scrapers.types(url, index):
         action_url = common.action_url(nextAction, url=show_url)
         name = all_title
-        di_list.append(common.diritem(name, action_url, image))
+        di_list.append(common.diritem(name, action_url, ''))
 
     if len(di_list) <= 0:
         common.popup(common.getMessage(33305))
@@ -212,26 +200,11 @@ def remove_saved(all_title, show_url, image):
 @_action
 def play_mirror(url):
     with common.busy_indicator():
-        # soup = BeautifulSoup(common.webread(url), 'html5lib')
-        # iframe = soup.find(id='iframeplayer')
-        # iframe_url = urljoin(config.base_url, iframe.attrs['src'])
-        (vidurl, pars) = scrapers.episodeVideo(urljoin(config.video_url, url)) # common.resolve(url)
-        vidurl = _base64(vidurl)
-        if not re.match(r'(.)*\.m3u8$', vidurl):
-            if re.match(r'(.*)123ku(.*)', pars):
-                vidurl = scrapers.episodeVideo_123ku(vidurl)
-            else:
-                vidurl = scrapers.episodeVideo_dplayer(vidurl)
-
+        common.error("What is the url: " + url)
+        (title, vidurl) = scrapers.episodeVideo(url.split('?')[0]) # common.resolve(url)
         if vidurl:
-            try:
-                title, image = scrapers.title_image(urljoin(config.video_url, url))
-            except Exception:
-                # we can proceed without the title and image
-                title, image = ('', '')
-
             li = xbmcgui.ListItem(title)
-            li.setThumbnailImage(image)
+            li.setThumbnailImage('')
             if 'User-Agent=' not in vidurl:
                 vidurl = vidurl + '|User-Agent=' + urllib.quote(get_ua())
             xbmc.Player().play(vidurl, li)
