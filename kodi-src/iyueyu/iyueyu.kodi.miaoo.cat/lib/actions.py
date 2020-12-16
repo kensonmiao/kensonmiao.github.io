@@ -212,12 +212,14 @@ def play_mirror(url):
         # iframe_url = urljoin(config.base_url, iframe.attrs['src'])
         (vidurl, pars) = scrapers.episodeVideo(urljoin(config.video_url, url)) # common.resolve(url)
         vidurl = _base64(vidurl)
-        if not re.match('$\.m3u8', vidurl):
-            if re.match('(.*)123ku', pars):
+        common.error(vidurl)
+        if not re.match(r'(.)*\.m3u8$', vidurl):
+            if re.match(r'(.*)123ku(.*)', pars):
                 vidurl = scrapers.episodeVideo_123ku(vidurl)
             else:
                 vidurl = scrapers.episodeVideo_dplayer(vidurl)
 
+        common.error(vidurl)
         if vidurl:
             try:
                 title, image = scrapers.title_image(urljoin(config.video_url, url))

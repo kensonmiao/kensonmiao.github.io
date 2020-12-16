@@ -110,6 +110,9 @@ def mirrors(url):
 @cache.memoize(60)
 def title_image(mirror_url):
     soup = _soup(mirror_url)
+    data = soup.find('div', attrs={'data-name' : True, 'data-nums' : True})
+    if data:
+        return (data['data-name'] + ' ' + data['data-nums'], '')
     title = soup.find('title').getText()
     image = ''
     return (title, image)
