@@ -2,14 +2,9 @@
 <addon id="repository.miaoo" version="1.0.0" name="miaoo-kodi-repo" provider-name="kenson">
     <extension point="xbmc.addon.repository" name="miaoo-kodi-repo">
         <dir>
-            <info compressed="false">https://kensonmiao.github.io/kodi-src/duboku/duboku.kodi.miaoo.cat/addon.xml</info>
-            <checksum>https://kensonmiao.github.io/kodi/duboku/addon.xml.md5</checksum>
-            <datadir zip="true">https://kensonmiao.github.io/kodi/duboku/</datadir>
-        </dir>
-        <dir>
-            <info compressed="false">https://kensonmiao.github.io/kodi-src/iyueyu/iyueyu.kodi.miaoo.cat/addon.xml</info>
-            <checksum>https://kensonmiao.github.io/kodi/iyueyu/addon.xml.md5</checksum>
-            <datadir zip="true">https://kensonmiao.github.io/kodi/iyueyu/</datadir>
+            <info compressed="false">https://kensonmiao.github.io/addons.xml</info>
+            <checksum>https://kensonmiao.github.io/kodi/addons.xml.md5</checksum>
+            <datadir zip="true">https://kensonmiao.github.io/kodi/addons/</datadir>
         </dir>
         <dir>
             <info compressed="false">https://raw.githubusercontent.com/jsergio123/zips/master/addons.xml</info>
