@@ -90,6 +90,11 @@ def shows(url):
         cm = _saved_to_list_context_menu(all_title, show_url, image)
         di_list.append(common.diritem(name, action_url, image, context_menu=cm))
 
+    for page, page_url in scrapers.pages(url):
+        action_url = common.action_url('shows', url=page_url)
+        page_label = cleanstring.page(page)
+        di_list.append(common.diritem(page_label, action_url))
+
     if len(di_list) <= 0:
         common.popup(common.getMessage(33305))
         return None

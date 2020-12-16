@@ -54,8 +54,13 @@ def search(url):
 @cache.memoize(10)
 def pages(url):
     soup = _soup(url)
-    page_list = soup.select('ul.myui-page > li > a')
-    return [(p.getText(), urljoin(url, p['href'])) for p in page_list if 'href' in p.attrs]
+    alinks = soup.select('div.fed-page-info > a[href]')
+    page_list = []
+    for p in alinks:
+        if 'href' in p.attrs and not re.match(r'javascript(.*)', p['href']):
+            page_list.append((p.getText(), urljoin(url, p['href']))) 
+    
+    return page_list
 
 @cache.memoize(10)
 def recent_updates(url):
