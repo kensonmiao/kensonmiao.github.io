@@ -44,8 +44,24 @@ def shows(url):
     return show_list
 
 def search(url):
-    # same template as shows
-    return shows(url)
+    soup = _soup(url)
+    tiles = soup.select("ul.myui-vodlist__media li.clearfix")
+    show_list = []
+    for t in tiles:
+        alink = t.select("a['data-original']")[0]
+        all_title = alink['title']
+        show_url = urljoin(config.base_url, alink['href'])
+        image = alink['data-original']
+
+        detail = t.select('div.detail')[0].findChildren("p" , recursive=False)
+        info = ''
+        for p in detail:
+            pstr = re.sub('\<a (.*?)\<\/a\>', '', str(p))
+            pstr = pstr.replace('<span class="split-line"></span>', ' ')
+            info += BeautifulSoup(pstr, 'html5lib').getText() + ' '
+
+        show_list.append((all_title, show_url, image, info)) 
+    return show_list
 
 @cache.memoize(10)
 def pages(url):

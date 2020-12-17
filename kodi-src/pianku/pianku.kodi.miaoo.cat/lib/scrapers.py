@@ -59,8 +59,22 @@ def sources(url):
     return [(tag.getText(), newUrl + '?tab=' + str(lis.index(tag)) + '&prevUrl=' + url) for tag in lis]
 
 def search(url):
-    # same template as shows
-    return shows(url)
+    soup = _soup(url)
+    tiles = soup.select("main dl")
+    show_list = []
+    for t in tiles:
+        imgTile = t.select("dt a img['data-funlazy']")[0]
+        alink = t.select("dd p")[0].select('strong a')[0]
+        all_title = alink.getText()
+        show_url = urljoin(config.base_url, alink['href'])
+        image = imgTile['data-funlazy']
+
+        detail = t.select('dd')[0].findChildren("p" , recursive=False)
+        info = detail[0].select('span.ss1')[0].getText() + ' ' + detail[2].getText() + ' ' + detail[3].getText()[:20] + '... ' + detail[4].getText()
+
+        show_list.append((all_title, show_url, image, info))
+    
+    return show_list
 
 @cache.memoize(10)
 def pages(url):

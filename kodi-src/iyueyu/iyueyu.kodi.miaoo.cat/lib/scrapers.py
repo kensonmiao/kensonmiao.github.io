@@ -48,8 +48,24 @@ def sources(url):
     return [(b.getText(), urljoin(config.base_url, b['href'])) for b in tag]
 
 def search(url):
-    # same template as shows
-    return shows(url)
+    soup = _soup(url)
+    tiles = soup.select("div.fed-main-info div.fed-part-layout dl")
+    show_list = []
+    for t in tiles:
+        imgTile = t.select("dt a['data-original']")[0]
+        alink = t.select("dd h1 a['href']")[0]
+        all_title = alink.getText()
+        show_url = urljoin(config.base_url, alink['href'])
+        image = imgTile['data-original']
+
+        detail = t.select('dd ul')[0].findChildren("li" , recursive=False)
+        info = ''
+        for li in detail:
+            info += li.getText() + ' '
+
+        show_list.append((all_title, show_url, image, info)) 
+        
+    return show_list
 
 @cache.memoize(10)
 def pages(url):

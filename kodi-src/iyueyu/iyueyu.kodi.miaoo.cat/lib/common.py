@@ -46,12 +46,15 @@ def add_item(diritem):
 def end_dir():
     xbmcplugin.endOfDirectory(_handle)
 
-def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[]):
+def diritem(label_or_stringid, url, image='', isfolder=True, context_menu=[], info=None):
     if type(label_or_stringid) is int:
         label = xbmcaddon.Addon().getLocalizedString(label_or_stringid)
     else:
         label = label_or_stringid
     listitem = xbmcgui.ListItem(label, iconImage=image)
+    listitem.setInfo('video', { 
+        'plot': info
+     })
     listitem.addContextMenuItems(context_menu, replaceItems=True)
     # this is unpackable for xbmcplugin.addDirectoryItem
     return dict(

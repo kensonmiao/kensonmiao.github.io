@@ -132,22 +132,23 @@ def search(url=None):
     if not url:
         heading = xbmcaddon.Addon().getLocalizedString(33301)
         s = common.input(heading)
-        s = '%E4%BB%A5%E5%AE%B6%E4%BA%BA'
         if s:
-            url = config.search_url % urllib.quote(s.encode('utf8'))
+            url = config.search_url % re.sub('\%', '_', urllib.quote_plus(s))
         else:
             return []
+
     di_list = []
     
-    for eng_name, ori_name, show_url, image in scrapers.search(url):
-        action_url = common.action_url('episodes', url=show_url)
-        name = cleanstring.show(eng_name, ori_name)
-        cm = _saved_to_list_context_menu(eng_name, ori_name, show_url, image)
-        di_list.append(common.diritem(name, action_url, image, context_menu=cm))
+    for ori_name, show_url, image, info in scrapers.search(url):
+        action_url = common.action_url('sources', url=show_url)
+        cm = _saved_to_list_context_menu(ori_name, show_url, image)
+        di_list.append(common.diritem(ori_name, action_url, image, context_menu=cm, info=info))
+
     for page, page_url in scrapers.pages(url):
         action_url = common.action_url('search', url=page_url)
         page_label = cleanstring.page(page)
         di_list.append(common.diritem(page_label, action_url))
+
     if not di_list:
         common.popup(xbmcaddon.Addon().getLocalizedString(33304))
     return di_list
