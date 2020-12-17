@@ -70,6 +70,8 @@ def filters(url):
         index = 3
         nextAction = 'shows'
 
+    action_url = common.action_url('shows', url=url)
+    di_list.append(common.diritem(common.getMessage(33007), action_url, ''))
     for all_title, show_url, image in scrapers.types(url, index):
         action_url = common.action_url(nextAction, url=show_url)
         name = all_title

@@ -35,6 +35,10 @@ msgctxt "#33006"
 msgid "Search"
 msgstr "搜索"
 
+msgctxt "#33007"
+msgid "Search"
+msgstr "全部"
+
 # Views
 ###################################
 
