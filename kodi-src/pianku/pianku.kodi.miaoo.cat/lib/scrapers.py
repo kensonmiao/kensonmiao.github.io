@@ -70,7 +70,30 @@ def search(url):
         image = imgTile['data-funlazy']
 
         detail = t.select('dd')[0].findChildren("p" , recursive=False)
-        info = detail[0].select('span.ss1')[0].getText() + ' ' + detail[2].getText() + ' ' + detail[3].getText()[:20] + '... ' + detail[4].getText()
+        indexList = [0,2,3,4]
+        if len(detail) == 4:
+            indexList = [0,1,2,3] 
+        info = ''
+        try:
+            info = detail[indexList[0]].select('span.ss1')[0].getText()
+        except:
+            pass
+        try:
+            info += (' ' + detail[indexList[1]].getText())
+        except:
+            pass
+        try:
+            cast = detail[indexList[2]].getText()
+            if len(cast) > 20:
+                info += (' ' + cast[:20] + '...')
+            else:
+                info += (' ' + cast)
+        except:
+            pass
+        try:
+            info +=  (' ' + detail[indexList[3]].getText())
+        except:
+            pass
 
         show_list.append((all_title, show_url, image, info))
     
