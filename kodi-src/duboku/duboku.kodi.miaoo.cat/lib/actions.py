@@ -202,11 +202,20 @@ def play_mirror(url):
                 # we can proceed without the title and image
                 title, image = ('', '')
 
+            osWin = xbmc.getCondVisibility('system.platform.windows')
+            osOsx = xbmc.getCondVisibility('system.platform.osx')
+            osLinux = xbmc.getCondVisibility('system.platform.linux')
+            osAndroid = xbmc.getCondVisibility('System.Platform.Android')
+
             li = xbmcgui.ListItem(title)
             li.setThumbnailImage(image)
-            if 'User-Agent=' not in vidurl:
-                vidurl = vidurl + '|User-Agent=' + urllib.quote(get_ua())
-            xbmc.Player().play(vidurl, li)
+
+            if osOsx or osWin or (osLinux and not osAndroid):    
+                if 'User-Agent=' not in vidurl:
+                    vidurl = vidurl + '|User-Agent=' + urllib.quote(get_ua())
+                xbmc.Player().play(vidurl, li)
+            elif osAndroid:
+                xbmc.executebuiltin("PlayMedia("+vidurl+")")
 
 @_dir_action
 def mirrors(url):
