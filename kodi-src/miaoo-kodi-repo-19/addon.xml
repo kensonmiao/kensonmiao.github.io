@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.miaoo" version="1.0.0" name="miaoo-kodi-repo" provider-name="kenson">
+    <extension point="xbmc.addon.repository" name="miaoo-kodi-repo">
+        <dir>
+            <info compressed="false">https://kensonmiao.github.io/kodi/addons19.xml</info>
+            <checksum>https://kensonmiao.github.io/kodi/addons19.xml.md5</checksum>
+            <datadir zip="true">https://kensonmiao.github.io/kodi/addons19/</datadir>
+        </dir>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">miaoo-kodi-repo</summary>
+        <description lang="en">miaoo-kodi-repo</description>
+        <platform>all</platform>
+    </extension>
+</addon>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addons>
+
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <addon id="duboku.kodi.miaoo.cat" name="Duboku" version="0.0.4" provider-name="Kenson">
+        <requires>
+            <import addon="xbmc.python" version="2.25.0"/>
+            <import addon="script.module.html5lib" version="0.999.0"/>
+            <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+            <import addon="script.module.requests" version="2.22.0"/>
+            <import addon="script.module.resolveurl" version="5.0.38"/>
+        </requires>
+        <extension point="xbmc.python.pluginsource" library="addon.py">
+            <provides>video</provides>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary>Load content from Duboku</summary>
+            <description></description>
+            <language></language>
+            <platform>all</platform>
+            <license>Apache-2.0</license>
+            <forum></forum>
+            <website>kodi.miaoo.cat</website>
+            <email>kenson@miaoo.cat</email>
+            <source></source>
+            <news></news>
+            <disclaimer></disclaimer>
+            <assets>
+                <icon>resources/icon.png</icon>
+                <fanart>resources/fanart.jpg</fanart>
+            </assets>
+        </extension>
+    </addon>
+
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <addon id="iyueyu.kodi.miaoo.cat" name="iYueYu" version="0.0.5" provider-name="Kenson">
+        <requires>
+            <import addon="xbmc.python" version="2.25.0"/>
+            <import addon="script.module.html5lib" version="0.999.0"/>
+            <import addon="script.module.beautifulsoup4" version="4.6.2"/>
+            <import addon="script.module.requests" version="2.22.0"/>
+            <import addon="script.module.resolveurl" version="5.0.38"/>
+        </requires>
+        <extension point="xbmc.python.pluginsource" library="addon.py">
+            <provides>video</provides>
+        </extension>
+        <extension point="xbmc.addon.metadata">
+            <summary>Load content from iYueYu</summary>
+            <description></description>
+            <language></language>
+            <platform>all</platform>
+            <license>Apache-2.0</license>
+            <forum></forum>
+            <website>kodi.miaoo.cat</website>
+            <email>kenson@miaoo.cat</email>
+            <source></source>
+            <news></news>
+            <disclaimer></disclaimer>
+            <assets>
+                <icon>resources/icon.png</icon>
+                <fanart>resources/fanart.jpg</fanart>
+            </assets>
+        </extension>
+    </addon>
+	
+	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+	<addon id="pianku.kodi.miaoo.cat" name="PianKu" version="0.0.3" provider-name="Kenson">
+		<requires>
+			<import addon="xbmc.python" version="2.25.0"/>
+			<import addon="script.module.html5lib" version="0.999.0"/>
+			<import addon="script.module.beautifulsoup4" version="4.6.2"/>
+			<import addon="script.module.requests" version="2.22.0"/>
+			<import addon="script.module.resolveurl" version="5.0.38"/>
+		</requires>
+		<extension point="xbmc.python.pluginsource" library="addon.py">
+			<provides>video</provides>
+		</extension>
+		<extension point="xbmc.addon.metadata">
+			<summary>Load content from PianKu</summary>
+			<description></description>
+			<language></language>
+			<platform>all</platform>
+			<license>Apache-2.0</license>
+			<forum></forum>
+			<website>kodi.miaoo.cat</website>
+			<email>kenson@miaoo.cat</email>
+			<source></source>
+			<news></news>
+			<disclaimer></disclaimer>
+			<assets>
+				<icon>resources/icon.png</icon>
+				<fanart>resources/fanart.jpg</fanart>
+			</assets>
+		</extension>
+	</addon>
+
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <addon id="plugin.video.icdrama" version="2.2.0" name="Icdrama" provider-name="aznhusband, dumbo0001, s_h, boleanly, mugol, General-Meow, cthlo">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.html5lib" version="0.999.0"/>
+        <import addon="script.module.beautifulsoup4" version="4.3.2"/>
+        <import addon="script.module.requests" version="2.9.1"/>
+        <import addon="script.module.resolveurl" version="5.0.38"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary>Dramas, shows, and movies from icdrama.se</summary>
+        <description>Provides contents from icdrama.se. "Happy wife, happy life"</description>
+        <disclaimer>This addon is not affiliated with icdrama.se</disclaimer>
+        <platform>all</platform>
+        <license>MIT License</license>
+    </extension>
+    </addon>
+
+    <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+    <addon id="script.module.resolveurl" name="ResolveURL" version="5.1.18" provider-name="gujal">
+        <requires>
+            <!-- <import addon="xbmc.python" version="3.0.0" /> -->
+            <import addon="script.module.six" />
+            <import addon="script.module.kodi-six" />
+            <import addon="plugin.video.youtube" optional="true" />
+            <import addon="script.module.python.twitch" optional="true" />
+            <import addon="script.module.cryptopy" version="1.2.6" optional="true" />
+            <import addon="plugin.googledrive" optional="true" />
+        </requires>
+        <extension point="xbmc.python.module" library="lib" />
+        <extension point="xbmc.python.pluginsource" library="lib/default.py" />
+        <extension point="xbmc.addon.metadata">
+            <platform>all</platform>
+            <summary lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi.</summary>
+            <summary lang="es_ES">Resolver enlaces a videos de sitios populares para poder reproducirlos en XBMC/Kodi.</summary>
+            <summary lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju.</summary>
+            <summary lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi.</summary>
+            <description lang="en_GB">Resolve common video host URL's to be playable in XBMC/Kodi, simplify addon development of video plugins requiring multi video hosts.</description>
+            <description lang="el_GR">Επίλυση συνδέσμων κοινών εξυπηρετητών σε μορφή βίντεο ικανό για αναπαραγωγή στο XBMC/Kodi, απλοποίηση της ανάπτυξης των προσθέτων που χρησιμοποιούν πολλαπλούς εξυπηρετητές για υλικό βίντεο</description>
+            <description lang="hr_HR">Prilagodi najčešće URL-ove video izvora kako bi radili u XBMC/Kodiju, pojednostavnjuje razvoj priključaka za video dodatke koji zahtjevaju višestruke video izvore.</description>
+            <disclaimer lang="en_GB">This script only resolves video content from legitimate file lockers without prejudice. If this script is being used by 3rd parties to resolve content that you feel infringes upon your Intellectual Property then please take your complaints to the actual website or developer linking to such content and not here. This script in no way searches for any content whatsoever.</disclaimer>
+            <disclaimer lang="el_GR">Το ανωτέρο σενάριο το μόνο που κάνει είναι να επιλύει οπτικοακουστικό περιεχόμενο από νόμιμες πηγές χωρίς προκατάληψη. Εάν το ανωτέρο σενάριο χρησιμοποιηθεί από τρίτους ώστε να επιλύσει περιεχόμενο το οποίο σας προκαλεί αντίδραση ότι παραβιάζει την πνευματική σας ιδιοκτησία παρακαλώ μεταφέρετε τα παραπονά σας στον ιστότοπο τον οποίο βρίσκεται το εν λόγω περιεχόμενο η τον δημιουργό ο οποίος πραγματοποιεί την σύνδεση και όχι εδω. Το σενάριο αυτό ουδεμία περίπτωση πραγματοποιεί αναζήτηση περιεχομένου.</disclaimer>
+            <assets>
+                <icon>icon.png</icon>
+                <fanart>fanart.jpg</fanart>
+            </assets>
+        </extension>
+    </addon>
+
+</addons>
