@@ -5,6 +5,9 @@ from lib.common import diritem, action_url, profile_dir
 base_url = 'https://www.pianku.me'
 cache_file = os.path.join(profile_dir, 'cache.pickle')
 store_file = os.path.join(profile_dir, 'store.pickle')
+local_proxy = 'http://localhost:11133'
+domain_using_proxy = ['mahua-kb\.com', 'okzy\.com', 'kuyun\.com']
+
 
 # the trailing forward slashes are necessary
 # without it, page urls will be wrong (icdrama bug)

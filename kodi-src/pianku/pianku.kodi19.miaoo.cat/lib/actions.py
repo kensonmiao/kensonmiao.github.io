@@ -205,6 +205,10 @@ def play_mirror(url):
         (title, vidurl) = scrapers.episodeVideo(url.split('?')[0]) # common.resolve(url)
         if vidurl:
             li = xbmcgui.ListItem(title)
+            for pxyDomain in config.domain_using_proxy:
+                if(re.search(pxyDomain, vidurl)):
+                    vidurl = config.local_proxy + '/' + re.sub('\://', '/', vidurl, 1)
+                    break
             if 'User-Agent=' not in vidurl:
                 vidurl = vidurl + '|User-Agent=' + quote(get_ua())
             xbmc.Player().play(vidurl, li)
