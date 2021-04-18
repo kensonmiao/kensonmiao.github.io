@@ -4,7 +4,8 @@ import urllib
 import functools
 import xbmcaddon
 import re
-from urllib.parse import quote, urljoin, quote_plus, unquote
+import urllib.parse as urlparse
+from urllib.parse import quote, urljoin, quote_plus, unquote, parse_qs
 from lib import config, common, scrapers, store, cleanstring, cache
 
 actions = []
@@ -38,7 +39,7 @@ def index():
     
     url = urljoin(config.base_url, '/iptv.php?tid=gt')
     for tv_title, tv_url, image in scrapers.getTVSources(url):
-        action_url = common.action_url('mirrors', url=urljoin(config.base_url,tv_url))
+        action_url = common.action_url('mirrors', url=urljoin(config.base_url,tv_url), title=tv_title)
         di_list.append(common.diritem(tv_title, action_url, image))
 
     return di_list
@@ -183,20 +184,20 @@ def play_mirror(url, title):
         # soup = BeautifulSoup(common.webread(url), 'html5lib')
         # iframe = soup.find(id='iframeplayer')
         # iframe_url = urljoin(config.base_url, iframe.attrs['src'])
-        vidurl = url # common.resolve(url)
+        vidurl = quote(url, ':/?&=') # common.resolve(url)
 
         if vidurl:
             li = xbmcgui.ListItem(title)
             xbmc.Player().play(vidurl, li)
 
 @_dir_action
-def mirrors(url):
-    return _mirrors(url)
+def mirrors(url, title):
+    return _mirrors(url, title)
 
-def _mirrors(url):
+def _mirrors(url, title):
     di_list = []
     for all_title, show_url, image in scrapers.categories(url):
-        action_url = common.action_url('play_mirror', url=show_url, title=all_title)
+        action_url = common.action_url('play_mirror', url=show_url, title=title + '-' + all_title)
         name = all_title
         di_list.append(common.diritem(name, action_url, image))
     return di_list

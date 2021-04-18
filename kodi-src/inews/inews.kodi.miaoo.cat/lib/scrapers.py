@@ -27,21 +27,20 @@ def categories(url):
     v1 = ''
     v2 = ''
     for tag in soup.find_all('script'):
-        if tag.getText().find('.split') >= 0:
-            # common.error(tag.getText())
-            m = re.findall(r'var(.+)=(.*)\"(.*)\"\;', tag.getText())
+        m = re.findall(r'var(.+)=(.*)\"(.*)\"\;', tag.getText())
+        if(len(m) >= 2):
             v1 = m[0][2]
             v2 = m[1][2]
         
     show_list = []
-    # common.error(v1 + ' ' + v2)
+    common.error(v1 + ' ' + v2)
     for t in soup.select('#playURL > option'):
         all_title = t.getText()
         show_url = t['value']
-        # common.error(show_url)
+        common.error(show_url)
         show_url = show_url.replace(v2, '').replace(v1, '').replace(v2[::-1], '').replace(v1[::-1], '')[::-1]
 
-        # common.error(show_url)
+        common.error(show_url)
         show_list.append((all_title, show_url, '')) 
 
     return show_list
