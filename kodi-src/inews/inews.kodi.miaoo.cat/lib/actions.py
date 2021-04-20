@@ -37,7 +37,17 @@ def _dir_action(func):
 def index():
     di_list = []
     
-    url = urljoin(config.base_url, '/iptv.php?tid=gt')
+    url = urljoin(config.base_url, '/iptva.php?app=126')
+    for tv_title, tv_url, image in scrapers.getTVSources(url)[1:]:
+        action_url = common.action_url('tv', url=urljoin(config.base_url,tv_url))
+        di_list.append(common.diritem(tv_title, action_url, image))
+
+    return di_list
+
+@_dir_action
+def tv(url):
+    di_list = []
+    
     for tv_title, tv_url, image in scrapers.getTVSources(url):
         action_url = common.action_url('mirrors', url=urljoin(config.base_url,tv_url), title=tv_title)
         di_list.append(common.diritem(tv_title, action_url, image))
