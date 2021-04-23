@@ -3,6 +3,7 @@ import urllib
 from urllib.parse import urljoin, urlparse
 from bs4 import BeautifulSoup
 from lib import cache, config, common
+import js2py
 
 def _get(url):
     # only scrape within the site
@@ -26,11 +27,17 @@ def categories(url):
     soup = _soup(url)
     v1 = ''
     v2 = ''
+    decode1 = None
     for tag in soup.find_all('script'):
         m = re.findall(r'var(.+)=(.*)\"(.*)\"\;', tag.getText())
         if(len(m) >= 2):
             v1 = m[0][2]
             v2 = m[1][2]
+    if(len(v1) <= 0 and len(v2) <= 0):
+        for tag in soup.find_all('script'):
+            m = re.findall(r'var(.+)=(.*)\"(.*)\"\;', tag.getText())
+            if(len(m) > 0):
+                decode1 = __decode1(tag.getText())
         
     show_list = []
     common.error(v1 + ' ' + v2)
@@ -39,11 +46,19 @@ def categories(url):
         show_url = t['value']
         common.error(show_url)
         show_url = show_url.replace(v2, '').replace(v1, '').replace(v2[::-1], '').replace(v1[::-1], '')[::-1]
+        if(show_url.index('token=123') >= 0 and decode1 != None):
+            show_url = show_url.replace('token=123', 'token=' + decode1.token)
+            show_url = show_url.replace(decode1.hken, '')
 
         common.error(show_url)
         show_list.append((all_title, show_url, '')) 
 
     return show_list
+
+def __decode1(js):
+    test = js2py.eval_js('function add() { ' + js + '; return { token: token, hken: hken}; }')
+    tokenObj = test()
+    return tokenObj
 
 @cache.memoize(10)
 def types(url, index):

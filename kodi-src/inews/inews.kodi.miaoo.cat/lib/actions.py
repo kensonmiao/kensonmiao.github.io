@@ -209,5 +209,5 @@ def _mirrors(url, title):
     for all_title, show_url, image in scrapers.categories(url):
         action_url = common.action_url('play_mirror', url=show_url, title=title + '-' + all_title)
         name = all_title
-        di_list.append(common.diritem(name, action_url, image))
+        di_list.append(common.diritem(name, action_url, image, isfolder=False))
     return di_list
