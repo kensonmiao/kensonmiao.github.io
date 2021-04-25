@@ -1,6 +1,6 @@
 import re
 import urllib
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, parse_qs
 from bs4 import BeautifulSoup
 from lib import cache, config, common
 import js2py
@@ -29,36 +29,63 @@ def categories(url):
     v2 = ''
     decode1 = None
     for tag in soup.find_all('script'):
-        m = re.findall(r'var(.+)=(.*)\"(.*)\"\;', tag.getText())
+        m = re.findall(r'(.+)=(.*)\"(.*)\"\;', tag.getText())
         if(len(m) >= 2):
             v1 = m[0][2]
             v2 = m[1][2]
     if(len(v1) <= 0 and len(v2) <= 0):
         for tag in soup.find_all('script'):
-            m = re.findall(r'var(.+)=(.*)\"(.*)\"\;', tag.getText())
+            m = re.findall(r'(.+)=(.*)\"(.*)\"\;', tag.getText())
             if(len(m) > 0):
                 decode1 = __decode1(tag.getText())
         
     show_list = []
     common.error(v1 + ' ' + v2)
-    for t in soup.select('#playURL > option'):
-        all_title = t.getText()
-        show_url = t['value']
-        common.error(show_url)
-        show_url = show_url.replace(v2, '').replace(v1, '').replace(v2[::-1], '').replace(v1[::-1], '')[::-1]
-        if(show_url.index('token=123') >= 0 and decode1 != None):
-            show_url = show_url.replace('token=123', 'token=' + decode1.token)
-            show_url = show_url.replace(decode1.hken, '')
+    options = soup.select('#playURL > option')
+    if(len(options) == 1 and len(options[0]['value']) == 0):
+        script = ''
+        for tag in soup.find_all('script'):
+            tagScript = tag.getText()
+            m = re.findall(r'(.+)=(.*)\"(.*)\"\;', tagScript)
+            if(len(m) > 0):
+                script += tagScript + ';'
+            elif('vstPlay' in tagScript):
+                script += tagScript.replace('document.addEventListener("plusready", vstPlay, false);', '')
+        common.error(script)
+        if(len(script)):
+            url = __decode2(script)
+            common.error(url)
+            show_list.append((options[0].getText(), url, '')) 
+    else:
+        for t in options:
+            all_title = t.getText()
+            show_url = t['value']
+            common.error(show_url)
+            show_url = show_url.replace(v2, '').replace(v1, '').replace(v2[::-1], '').replace(v1[::-1], '')[::-1]
+            if(show_url.index('token=123') >= 0 and decode1 != None):
+                show_url = show_url.replace('token=123', 'token=' + decode1.token)
+                show_url = show_url.replace(decode1.hken, '')
 
-        common.error(show_url)
-        show_list.append((all_title, show_url, '')) 
+            common.error(show_url)
+            show_list.append((all_title, show_url, '')) 
 
     return show_list
 
 def __decode1(js):
-    test = js2py.eval_js('function add() { ' + js + '; return { token: token, hken: hken}; }')
-    tokenObj = test()
-    return tokenObj
+    try:
+        test = js2py.eval_js('function add() { ' + js + '; return { token: token, hken: hken}; }')
+        tokenObj = test()
+        return tokenObj
+    except:
+        return None
+
+def __decode2(js):
+    # try:
+    test = js2py.eval_js('function add() { plus = { video: { VideoPlayer: function(name, obj) { return obj; } } };' + js + '; vstPlay(); return video.src; }')
+    url = test()
+    return url
+    # except:
+    #     return ''
 
 @cache.memoize(10)
 def types(url, index):

@@ -32,7 +32,7 @@ def webread(url):
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-        'Cookie': 'UM_distinctid=178df6ca0c4b-02e35691701d5b-2579436c-57e40-178df6ca0c5ba; _ga=GA1.2.1023821354.1618656142; _gid=GA1.2.160775913.1618656142; appid=__W2A__app.iptv800.com; CNZZDATA1273922221=1108430403-1618653332-%7C1618696572; iptvad=1; _gat_gtag_UA_120439249_1=1'
+        'Cookie': 'UM_distinctid=178df6ca0c4b-02e35691701d5b-2579436c-57e40-178df6ca0c5ba; _ga=GA1.2.1023821354.1618656142; _gid=GA1.2.160775913.1618656142; appid=__W2A__app.iptv800.com; CNZZDATA1273922221=1108430403-1618653332-%7C1618696572; iptvad=1; _gat_gtag_UA_120439249_1=1; idss=2000'
     }
     for key in headers:
         req.add_header(key, headers[key])

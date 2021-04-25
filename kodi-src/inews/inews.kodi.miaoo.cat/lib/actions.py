@@ -38,7 +38,7 @@ def index():
     di_list = []
     
     url = urljoin(config.base_url, '/iptva.php?app=126')
-    for tv_title, tv_url, image in scrapers.getTVSources(url)[1:]:
+    for tv_title, tv_url, image in scrapers.getTVSources(url):
         action_url = common.action_url('tv', url=urljoin(config.base_url,tv_url))
         di_list.append(common.diritem(tv_title, action_url, image))
 
@@ -206,6 +206,7 @@ def mirrors(url, title):
 
 def _mirrors(url, title):
     di_list = []
+    
     for all_title, show_url, image in scrapers.categories(url):
         action_url = common.action_url('play_mirror', url=show_url, title=title + '-' + all_title)
         name = all_title
