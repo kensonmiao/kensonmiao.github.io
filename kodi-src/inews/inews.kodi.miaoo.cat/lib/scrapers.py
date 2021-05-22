@@ -3,6 +3,7 @@ import urllib
 from urllib.parse import urljoin, urlparse, parse_qs
 from bs4 import BeautifulSoup
 from lib import cache, config, common
+import base64
 import js2py
 
 def _get(url):
@@ -25,67 +26,123 @@ def getTVSources(url):
 
 def categories(url):
     soup = _soup(url)
-    v1 = ''
-    v2 = ''
-    decode1 = None
+    token = None
     for tag in soup.find_all('script'):
-        m = re.findall(r'(.+)=(.*)\"(.*)\"\;', tag.getText())
-        if(len(m) >= 2):
-            v1 = m[0][2]
-            v2 = m[1][2]
-    if(len(v1) <= 0 and len(v2) <= 0):
-        for tag in soup.find_all('script'):
-            m = re.findall(r'(.+)=(.*)\"(.*)\"\;', tag.getText())
-            if(len(m) > 0):
-                decode1 = __decode1(tag.getText())
+        if 'bdecodeb' in tag.getText():
+            token = __decode(tag.getText())
+            break
         
     show_list = []
-    common.error(v1 + ' ' + v2)
-    options = soup.select('#playURL > option')
-    if(len(options) == 1 and len(options[0]['value']) == 0):
-        script = ''
-        for tag in soup.find_all('script'):
-            tagScript = tag.getText()
-            m = re.findall(r'(.+)=(.*)\"(.*)\"\;', tagScript)
-            if(len(m) > 0):
-                script += tagScript + ';'
-            elif('vstPlay' in tagScript):
-                script += tagScript.replace('document.addEventListener("plusready", vstPlay, false);', '')
-        common.error(script)
-        if(len(script)):
-            url = __decode2(script)
-            common.error(url)
-            show_list.append((options[0].getText(), url, '')) 
-    else:
+    common.error(token)
+    if hasattr(token, 'token'):
+        options = soup.select('#playURL > option')
         for t in options:
             all_title = t.getText()
             show_url = t['value']
             common.error(show_url)
-            show_url = show_url.replace(v2, '').replace(v1, '').replace(v2[::-1], '').replace(v1[::-1], '')[::-1]
-            if(show_url.index('token=123') >= 0 and decode1 != None):
-                show_url = show_url.replace('token=123', 'token=' + decode1.token)
-                show_url = show_url.replace(decode1.hken, '')
-
+            show_url = __decodeUrl(show_url, token.hken, token.token)
             common.error(show_url)
             show_list.append((all_title, show_url, '')) 
+    else:
+        titleTile = soup.find('title')
+        show_list.append((titleTile.getText(), token, '')) 
 
     return show_list
 
-def __decode1(js):
-    try:
-        test = js2py.eval_js('function add() { ' + js + '; return { token: token, hken: hken}; }')
+def __decode(js):
+    docJs = """
+        function unbox() { 
+            var evalCode = ""; 
+            var document = { 
+                write: function(str) { evalCode = str; } 
+            }; 
+            var bdecodeb = function(str, key) { return {str: str, key: key}; }; """ + js + """ return evalCode; }"""
+    strAndKey = js2py.eval_js(docJs)()
+    decodedStr = __bdecodeb(strAndKey.str, strAndKey.key)
+    decodedStr = BeautifulSoup(decodedStr, 'html5lib').get_text()
+    if "token" in decodedStr:
+        test = js2py.eval_js('function add() { ' + decodedStr + '; return { token: token, hken: hken}; }')
         tokenObj = test()
         return tokenObj
+    else:
+        presetCode = """
+            function secondUnbox() {
+                var plus = { video: { VideoPlayer: function(str, code) { return code; } } };
+                var document = { addEventListener: function(event, func) {} };
+                """ + __bdecode_str() + ";" + decodedStr + """
+                vstPlay();
+                return video.src;
+            }
+        """
+        common.error(presetCode)
+        src = js2py.eval_js(presetCode)()
+        return src
+
+def __decodeUrl(cryptedUrl, hken, token):
+    try:
+        url = cryptedUrl[::-1]
+        url = __bdecodeb(url, hken)
+        url = url.replace('token=123', 'token=' + token)
+        url = url.replace(hken, '')
+        if url not in (None, ''):
+            return url
     except:
         return None
 
-def __decode2(js):
-    # try:
-    test = js2py.eval_js('function add() { plus = { video: { VideoPlayer: function(name, obj) { return obj; } } };' + js + '; vstPlay(); return video.src; }')
-    url = test()
-    return url
-    # except:
-    #     return ''
+def __bdecodeb(str,key):
+    bdecodeb = js2py.eval_js(__bdecodeb_str())
+    decryptedStr = bdecodeb(str, key)
+    return decryptedStr
+
+def __bdecodeb_str():
+    return """
+        function bdecodeb(str,key) {
+            """ + __bdecode_str() + """
+            string = bdecode(str);
+            len = key.length;
+            code = "";
+            for (i = 0; i < string.length; i++) {
+                k = i % len;
+                code += String.fromCharCode(string.charCodeAt(i) ^ key.charCodeAt(k));
+            }
+            stra = bdecode(code);
+            return stra;
+        }
+    """
+
+def __bdecode_str():
+    return """
+        var bdecode = function(data) {
+            var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+            var a1, a2, a3, h1, h2, h3, h4, bits, i = 0,
+            ac = 0,
+            dec = "",
+            tmp_arr = [];
+            if (!data) {
+                return data;
+            }
+            data += '';
+            do {
+                h1 = keyStr.indexOf(data.charAt(i++));
+                h2 = keyStr.indexOf(data.charAt(i++));
+                h3 = keyStr.indexOf(data.charAt(i++));
+                h4 = keyStr.indexOf(data.charAt(i++));
+                bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
+                a1 = bits >> 16 & 0xff;
+                a2 = bits >> 8 & 0xff;
+                a3 = bits & 0xff;
+                if (h3 == 64) {
+                    tmp_arr[ac++] = String.fromCharCode(a1);
+                } else if (h4 == 64) {
+                    tmp_arr[ac++] = String.fromCharCode(a1, a2);
+                } else {
+                    tmp_arr[ac++] = String.fromCharCode(a1, a2, a3);
+                }
+            } while (i < data.length);
+            dec = tmp_arr.join('');
+            return dec;
+        }
+    """
 
 @cache.memoize(10)
 def types(url, index):
